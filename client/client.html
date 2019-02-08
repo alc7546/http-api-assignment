@@ -6,7 +6,102 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    const parseJSON = (xhr, content) => {
+      const obj = JSON.parse(xhr.response);
 
+      if(obj.message) {
+        const p = document.createElement('p');
+        p.textContent = `Message: ${obj.message}`;
+        content.appendChild(p);
+      }
+      console.dir(obj);
+    };
+
+    const parseXML = (xhr,content) => {
+      const message = xhr.responseXML.querySelector('message').textContent;
+      const id = xhr.responseXML.querySelector('id').textContent; // may need to take out for testing
+      const p = document.createElement('p');
+      p.textContent = `Message: ${message}`;
+      content.appendChild(p);
+
+      console.log(xhr.responseXML);
+    };
+
+    const handleResponse = (xhr) => {
+      const type = xhr.getResponseHeader('content-type');
+      const content = document.querySelector('#content');
+
+
+      
+      // parse the response text into a JSON object
+      //const obj = JSON.parse(xhr.response);
+
+      switch(xhr.status){
+        case 200: // success
+        content.innerHTML = `<b>Success</b>`;
+        break;
+        case 400: // bad request
+        content.innerHTML = `<b>Bad Request</b>`;
+        break;
+        case 401: // unauthorized
+        content.innerHTML = `<b>Unauthorized</b>`;
+        break;
+        case 403: // forbidden
+        content.innerHTML = `<b>Forbidden</b>`;
+        break;
+        case 500: // Internal Server Error
+        content.innerHTML = `<b>Internal Server Error </b>`;
+        break;
+        case 501: // Not Implemented
+        content.innerHTML = `<b>Not Implemented</b>`;
+        break;
+        default:
+        content.innerHTML = `<b>Resource Not Found</b>`;
+        break;
+      }
+      if(type === 'application/json'){
+        parseJSON(xhr,content);
+      } else if(type === 'text/xml'){
+        parseXML(xhr,content);
+      }
+      
+    };
+
+    // function to send our post request
+    const sendAjax = (e,section) => {
+
+      const url = section.querySelector("#page").value;
+      const acceptedType = section.querySelector('#type').value
+      
+      // grab the selects options 
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open('GET',url);
+
+      xhr.setRequestHeader('Accept', acceptedType);
+      xhr.onload = () => handleResponse(xhr);
+      xhr.send();
+
+      e.preventDefault();
+      return false; 
+      
+    };
+
+
+
+    const init = () => {
+      // grab the page
+      const section = document.querySelector('#top');
+      const button = document.querySelector('#send');
+      
+      // grab the type
+      const getCode = (e) => sendAjax(e,section);
+      // create handler
+      button.addEventListener('click', getCode);
+      // attach send button
+    };
+
+    window.onload = init;
   </script>
 </head>
 <body>

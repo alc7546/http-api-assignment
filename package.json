@@ -1,0 +1,30 @@
+{
+  "name": "http-api-assignment",
+  "version": "1.0.0",
+  "description": "HTTP API Assignment",
+  "main": "./src/server.js",
+  "engines": {
+    "node": "10.15.0",
+    "npm": "6.4.1"
+  },
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alc7546/http-api-assignment.git"
+  },
+  "author": "Andrew Clark",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alc7546/http-api-assignment/issues"
+  },
+  "homepage": "https://github.com/alc7546/http-api-assignment#readme",
+  "devDependencies": {
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
+}
